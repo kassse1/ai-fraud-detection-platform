@@ -1,0 +1,9 @@
+.idea/
+
+# Go
+**/*.exe
+backend-go/bin/
+
+# Python
+**/__pycache__/
+**/venv/
