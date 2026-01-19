@@ -4,33 +4,30 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/kassse1/ai-fraud-backend/internal/domain"
 	"github.com/kassse1/ai-fraud-backend/internal/orchestrator"
 )
 
 type AnalyzeHandler struct {
-	orchestrator *orchestrator.Orchestrator
+	orch *orchestrator.Orchestrator
 }
 
-func NewAnalyzeHandler() *AnalyzeHandler {
+func NewAnalyzeHandler(orch *orchestrator.Orchestrator) *AnalyzeHandler {
 	return &AnalyzeHandler{
-		orchestrator: orchestrator.NewOrchestrator(),
+		orch: orch,
 	}
 }
 
-func (h *AnalyzeHandler) Handle(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
+func (h *AnalyzeHandler) Analyze(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		Text string `json:"text"`
 	}
 
-	var req domain.AnalysisRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
 	}
 
-	result := h.orchestrator.Analyze(req.Text)
+	result := h.orch.Analyze(req.Text)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
