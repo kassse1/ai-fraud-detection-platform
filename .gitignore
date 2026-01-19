@@ -1,9 +1,19 @@
-.idea/
-
 # Go
-**/*.exe
-backend-go/bin/
+bin/
+*.exe
 
 # Python
-**/__pycache__/
-**/venv/
+venv/
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+
+# Node
+node_modules/
+dist/
+
+# Env
+.env
